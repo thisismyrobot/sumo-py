@@ -1,3 +1,0 @@
-[submodule "sumocharge/sumoproxy"]
-	path = sumocharge/sumoproxy
-	url = git@github.com:thisismyrobot/sumo-proxy.git
