@@ -67,15 +67,19 @@ class SumoController(object):
 
         self._d2c_server = UDPServer(('', d2c_port), UDPHandler)
         self._d2c_server.max_packet_size = vid_data_size
-        threading.Thread(target=self._d2c_server.serve_forever).start()
+        d2c_t = threading.Thread(target=self._d2c_server.serve_forever)
+        d2c_t.daemon = True
+        d2c_t.start()
 
         # Create and start the 40Hz movement sender. This keeps the connection
         # "alive".
         self._commands = collections.deque()
-        threading.Thread(
+        cmd_t = threading.Thread(
             target=self._cmd_thread,
             args=(self._commands,)
-        ).start()
+        )
+        cmd_t.daemon = True
+        cmd_t.start()
 
         # Do setup commands
         if start_video_stream:
