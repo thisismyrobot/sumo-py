@@ -14,12 +14,6 @@ import SocketServer
 MOTOR_HZ = 40.0
 
 
-def hex_repr(data):
-    """ Pretty-print binary data.
-    """
-    return ''.join('\\x{:02x}'.format(ord(c)) for c in str(data))
-
-
 class SumoPyException(Exception):
     pass
 
@@ -101,7 +95,7 @@ class SumoController(object):
             raise InitTimeoutException(
                 'Failed to perform init with Sumo - could not connect'
             )
-        init_sock.sendall(json.dumps(init_msg))
+        init_sock.sendall(json.dumps(init_msg) + '\x00')
 
         # Grab the JSON response, strip trailing \x00 to keep it valid.
         init_resp = init_sock.recv(1024)[:-1]
